@@ -31,14 +31,14 @@ class AppServiceProvider extends ServiceProvider
 
 
     {
-        // Doctor::created(function($doctor){
-        //     Mail::to($doctor->email)->send(new DoctorMail($doctor)); //Welcome Email
-        // });
-        // appointment::created(function ($appoint) {
+        Doctor::created(function($doctor){
+            Mail::to($doctor->email)->send(new DoctorMail($doctor)); //Welcome Email
+        });
+        appointment::created(function ($appoint) {
 
-        //     $appoint = appointment::find($appoint->id);
-        //     Mail::to($appoint->doctor->email)->send(new AppointmentMail($appoint)); //Appointment Email
+            $appoint = appointment::find($appoint->id);
+            Mail::to($appoint->doctor->email)->send(new AppointmentMail($appoint)); //Appointment Email
            
-        // });
+        });
     }
 }
