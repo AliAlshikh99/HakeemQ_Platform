@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Storage;
 */
 Route::middleware('auth:sanctum')->group(function () {
     
-    Route::post('logout',[AuthController::class,'logout']);
+    Route::post('logout',[AuthController::class,'logout']);//! logout api for doctor
 });
 
 Route::controller(AuthController::class)->group(function () {
