@@ -22,8 +22,8 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::controller(AuthController::class)->group(function () {
-    Route::post('/register','register'); 
-    Route::post('/login','login'); 
+    Route::post('/register','register'); //! Register api for doctor
+    Route::post('/login','login'); //! login api for doctor
 
     
     
