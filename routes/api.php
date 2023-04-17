@@ -18,12 +18,12 @@ use Illuminate\Support\Facades\Storage;
 */
 Route::middleware('auth:sanctum')->group(function () {
     
-    Route::post('logout',[AuthController::class,'logout']);//! logout api for doctor
+    Route::post('logout',[AuthController::class,'logout']);
 });
 
 Route::controller(AuthController::class)->group(function () {
-    Route::post('/register','register'); //! Register api
-    Route::post('/login','login'); //! login api
+    Route::post('/register','register'); 
+    Route::post('/login','login'); 
 
     
     
