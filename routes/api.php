@@ -22,7 +22,7 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::controller(AuthController::class)->group(function () {
-    Route::post('/register','register');
+    Route::post('/register','register'); //! Register api
     Route::post('/login','login');
 
     
