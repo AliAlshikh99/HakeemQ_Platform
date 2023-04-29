@@ -17,8 +17,10 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        $doctors=Doctor::all(['id','email','name','spz'])->load(['appointments:doctor_id,name']);
+        $doctors=Doctor::latest()->get();
+       
         return $this->doctorresponse($doctors,'Done',Response::HTTP_OK);
+        
 
 
        
@@ -44,10 +46,11 @@ class DoctorController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($spz)
+    public function show($id)
     {
-       $one_doctor= Doctor::where('spz',$spz)->get();
-       return response($one_doctor);
+        // $ids=[20,21,22];
+       $one_doctor= Doctor::find($id);
+       return $one_doctor->appointments;
     }
 
     /**
@@ -72,5 +75,10 @@ class DoctorController extends Controller
     {
         $doc=Doctor::destroy($id);
         return response('Done Delete');
+    }
+    public function search(Request $request){
+        $input=$request->input('input');
+        $result=Doctor::search($input)->get();
+        return $result;
     }
 }

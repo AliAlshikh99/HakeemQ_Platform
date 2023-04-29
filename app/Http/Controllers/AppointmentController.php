@@ -5,12 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\appointment;
 use App\Models\Doctor;
 use App\Models\DoctorAvailable;
+use App\Traits\ApiResponse;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Symfony\Component\HttpFoundation\Response;
 
 class AppointmentController extends Controller
 {
+    use ApiResponse;
     /**
      * Display a listing of the resource.
      *
@@ -43,10 +46,7 @@ class AppointmentController extends Controller
      */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'appointment_time'=>'unique:appointments',
-
-        // ]);
+        
        
 
         $appointment=appointment::create([
@@ -58,16 +58,12 @@ class AppointmentController extends Controller
            'gender'=>$request->gender,
            'description'=>$request->description,
            'appointment_date'=>$request->appointment_date,
-           'appointment_time'=>$request->appointment_time,
+           'appointment_time'=> $request->appointment_time,
            'doctor_id'=>$request->doctor_id,
           
         ]);
 
-        return response([
-            'status'=>'booking done',
-            'appointment'=>$appointment,
-
-        ]);
+      return $this->appointmentresponse($appointment,'Booking Done',Response::HTTP_CREATED);
     }
 
     /**
@@ -121,28 +117,37 @@ class AppointmentController extends Controller
       return response('Done Delete ALl');
     }
 
-    public function getAvilableTimes($date)
+    public function getAvilableTimes($id,$date)
     {
-          $appointment=appointment::where('appointment_date',$date)->get();
-    $taken_time=$appointment->pluck('appointment_time')->toArray();
+    $doctor=Doctor::find($id);
+        
+    $appointment=$doctor->appointments->where('appointment_date',$date);
+    $taken_times=$appointment->pluck('appointment_time')->toArray();
     $day=Carbon::parse($date)->format('l');
-    $available=DoctorAvailable::where('day',$day)->first();
+    // $available=DoctorAvailable::where('day',$day)->first();
+    $available=$doctor->times->where('day',$day)->first();
+    if (!isset($available) ) {
+        return 'عطلة';
+    }
     $available_times=[];
     $st_time=strtotime($available->st_time);
     $en_time=strtotime($available->en_time);
     while ($st_time<=$en_time) {
-        $time=date('H:i:s',$st_time);
-        if(!in_array($time,$taken_time)){
+        $time=date('H:i',$st_time);
+        if(!in_array($time,$taken_times)){
 
             $available_times[]=$time;
         }
         $st_time+=60*60;
-      
+        
+    }
+    if($available_times==null){
+        return 'عذرا لا يوجد مواعيد متاحة';
     }
     
    return response()->json([
     'available_times'=>$available_times,
-    'taken_times'=>$taken_time,
+    'taken_times'=>$taken_times,
    ]);
 
     }

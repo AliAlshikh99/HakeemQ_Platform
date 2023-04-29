@@ -2,21 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Laravel\Sanctum\HasApiTokens;
-
-use Illuminate\Auth\Authenticatable;
-
-namespace App\Models;
-
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class Doctor extends Authenticatable
+class admin extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -25,8 +17,14 @@ class Doctor extends Authenticatable
      *
      * @var array<int, string>
      */
-  protected $guarded=[''];
-  protected $guard='doctor';
+    protected $guard='admin';
+    protected $fillable = [
+        'name',
+        'email',
+        'password',
+       
+    ];
+
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -45,25 +43,4 @@ class Doctor extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-
-public function appointments()
-{
-return $this->hasMany(appointment::class);
-}
-public function times()
-{
-return $this->belongsToMany(DoctorAvailable::class,'doctor_times_pivot');
-}
-
-
-public function scopeSearch($query,$input)
-{
-    return $query
-    ->where('name','like',"%$input%")
-    ->orWhere('spz','like',"%$input%");
-}
-
-
-
 }

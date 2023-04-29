@@ -20,8 +20,8 @@ class AuthController extends Controller
 {
     
     //! *************Register section***********************
-    
     use ApiResponse;
+    
     public function register(RegisterRequest $req)
     {
     
@@ -49,13 +49,13 @@ class AuthController extends Controller
             'password' => 'required|min:5',
 
         ]);
-        $check_creds=Auth::attempt($request->only(['email', 'password']));
+        $check_creds=Auth::guard('doctor')->attempt($request->only(['email', 'password']));
 
 
         if ($check_creds) {
 
                $doctor = Doctor::where('email', $request->email)->first();
-            $token = $doctor->createToken('login token')->plainTextToken;
+            $token = $doctor->createToken('login token',['doctor'])->plainTextToken;
             return response()->json([
                 'message' => 'doctor logged in successfully',
                 'doctor' => $doctor->name,

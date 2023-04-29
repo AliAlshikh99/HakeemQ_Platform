@@ -38,18 +38,12 @@ return [
 
         'public' => [
             'driver' => 'local',
-            'root' => public_path('register'),
+            'root' => public_path('imgs'),
             'url' => env('APP_URL').'/storage',
             'visibility' => 'public',
             'throw' => false,
         ],
-        'images' => [
-            'driver' => 'local',
-            'root' => public_path('images'),
-            'url' => env('APP_URL').'/storage',
-            'visibility' => 'public',
-            'throw' => false,
-        ],
+
 
         's3' => [
             'driver' => 's3',

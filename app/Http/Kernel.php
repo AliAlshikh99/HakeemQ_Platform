@@ -2,6 +2,8 @@
 
 namespace App\Http;
 
+use App\Http\Controllers\AdminController;
+use App\Http\Middleware\DoctorMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -64,6 +66,10 @@ class Kernel extends HttpKernel
         'signed' => \App\Http\Middleware\ValidateSignature::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
+        'abilities' => \Laravel\Sanctum\Http\Middleware\CheckAbilities::class,
+        'ability' => \Laravel\Sanctum\Http\Middleware\CheckForAnyAbility::class,
+        // 'type.doctor'=>DoctorMiddleware::class,
+        // 'type.admin'=>AdminController::class,
         // 'AddCorsHeaders'=>\App\Http\Middleware\AddCorsHeaders::class,
     ];
 }

@@ -24,6 +24,15 @@ public function doctorresponse($data,$msg,$status)
      ];
      return response($response,$status);   
 }
+public function appointmentresponse($data,$msg,$status)
+{
+     $response=[
+            'data'=>$data,
+            'msg'=>$msg,
+            'status'=>$status,
+     ];
+     return response($response,$status);   
+}
 }
 
 ?>
