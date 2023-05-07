@@ -63,6 +63,7 @@ class AuthController extends Controller
             ]);
         } else {
             return response()->json([
+                'status'=>Response::HTTP_FORBIDDEN,
                 'message' => 'Email or Password not correct',
             ]);
             
@@ -79,7 +80,8 @@ class AuthController extends Controller
 
 
         return response()->json([
-            'message'=>'doctor logged out successfully '
+            'message'=>'doctor logged out successfully ',
+            
         ]);
     }
 

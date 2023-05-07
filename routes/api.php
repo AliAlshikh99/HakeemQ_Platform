@@ -14,6 +14,10 @@ use Illuminate\Support\Facades\Route;
 
 //!Protected Routes
 Route::middleware(['auth:sanctum','abilities:doctor'])->group(function () {
+    Route::get('/welcome', function () {
+        $doctor=auth()->user();
+        return 'Welcome Dr.'.$doctor->name;
+    });
     Route::get('/dashboard', function () {
         return response([
             'data'=>'Welcome in dashboard',
@@ -26,10 +30,6 @@ Route::middleware(['auth:sanctum','abilities:doctor'])->group(function () {
         $doctor_id=auth()->id();
            $appointments=appointment::where('doctor_id',$doctor_id)->get();
            return $appointments;
-        });
-        Route::get('/welcome', function () {
-            $doctor=auth()->user();
-            return 'Welcome Dr.'.$doctor->name;
         });
     });
     Route::apiResource('doctors', DoctorController::class);
@@ -50,7 +50,7 @@ Route::controller(AdminController::class)->prefix('admin')->group(function () {
 Route::controller(AppointmentController::class)->group(function(){
     Route::get('/available-times/{id}/{date}',[AppointmentController::class,'getAvilableTimes']);
     Route::delete('appoints/delete',[AppointmentController::class,'deleteAll']);
-    Route::post('appoints/create',[AppointmentController::class,'store']);
+    Route::post('appoints/store',[AppointmentController::class,'store']);
 
 });
  

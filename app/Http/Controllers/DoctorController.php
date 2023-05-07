@@ -17,7 +17,7 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        $doctors=Doctor::latest()->get();
+        $doctors=Doctor::latest('name')->take(10)->get();
        
         return $this->doctorresponse($doctors,'Done',Response::HTTP_OK);
         
@@ -50,7 +50,7 @@ class DoctorController extends Controller
     {
         // $ids=[20,21,22];
        $one_doctor= Doctor::find($id);
-       return $one_doctor->appointments;
+       return $one_doctor;
     }
 
     /**
