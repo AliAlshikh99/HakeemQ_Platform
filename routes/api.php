@@ -1,30 +1,19 @@
 <?php
 
-use App\Http\Controllers\AdminController;
-use App\Http\Controllers\AppointmentController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DoctorController;
-use App\Models\appointment;
-use App\Models\Doctor;
 use App\Models\img;
+use App\Models\Doctor;
+use App\Models\appointment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\DoctorController;
+use App\Http\Controllers\AppointmentController;
 
 
 
 //!Protected Routes
 Route::middleware(['auth:sanctum','abilities:doctor'])->group(function () {
-    Route::get('/welcome', function () {
-        $doctor=auth()->user();
-        return 'Welcome Dr.'.$doctor->name;
-    });
-    Route::get('/dashboard', function () {
-        return response([
-            'data'=>'Welcome in dashboard',
-            'request'=>request()->header(),
-        ]);
-        
-    });
     Route::post('logout',[AuthController::class,'logout']);
     Route::get('/appoints', function () {
         $doctor_id=auth()->id();
@@ -49,7 +38,8 @@ Route::controller(AdminController::class)->prefix('admin')->group(function () {
 
 Route::controller(AppointmentController::class)->group(function(){
     Route::get('/available-times/{id}/{date}',[AppointmentController::class,'getAvilableTimes']);
-    Route::delete('appoints/delete',[AppointmentController::class,'deleteAll']);
+    Route::delete('appoints/deleteAll',[AppointmentController::class,'deleteAll']);
+    Route::delete('appoints/{id}/delete',[AppointmentController::class,'destroy']);
     Route::post('appoints/store',[AppointmentController::class,'store']);
 
 });
