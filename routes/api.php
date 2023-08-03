@@ -1,16 +1,17 @@
 <?php
 
 use App\Models\img;
+use App\Mail\testmail;
 use App\Models\Doctor;
 use App\Models\appointment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\DoctorController;
+use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\AppointmentController;
-
-
 
 //!Protected Routes
 Route::middleware(['auth:sanctum','abilities:doctor'])->group(function () {
@@ -25,6 +26,36 @@ Route::middleware(['auth:sanctum','abilities:doctor'])->group(function () {
     //!Protected Routes
     Route::middleware(['auth:sanctum','abilities:admin'])->group(function () {
     Route::get('/appointments',[AppointmentController::class,'index']);
+    Route::put('/doctor/{id}/activate', function ($id) {
+        $doctor=Doctor::find($id);
+        if($doctor->is_activated == false){
+            $doctor->update([
+                'is_activated'=>true,
+            ]);
+            Mail::to($doctor->email)->send(new testmail());
+            return response([
+                'msg'=>'Done , Account activating Successfully',
+                'status'=>Response::HTTP_OK,
+            ]);
+        }
+        elseif($doctor->is_activated == true){
+                $doctor->update([
+                'is_activated'=>false,
+            ]);
+          
+            return response([
+                'msg'=>'Done , Account Deactivating Successfully',
+                'status'=>Response::HTTP_OK,
+            ]);
+        }
+        else {
+            return response(
+                [
+                    'msg'=>'your account is activated'
+                ]
+                );
+    }
+    });
 
 });
 
@@ -71,6 +102,8 @@ Route::post('/img', function (Request $request) {
     else{
         return 'Image not found';
     }
+
+    
     
     
 

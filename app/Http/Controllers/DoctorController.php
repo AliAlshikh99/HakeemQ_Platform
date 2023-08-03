@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Doctor;
-use Illuminate\Http\Request;
 use App\Traits\ApiResponse;
+use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class DoctorController extends Controller
@@ -17,7 +17,7 @@ class DoctorController extends Controller
      */
     public function index()
     {
-        $doctors=Doctor::latest('name')->take(10)->get();
+        $doctors=Doctor::latest()->where('is_activated',true)->get();
        
         return $this->doctorresponse($doctors,'Done',Response::HTTP_OK);
         

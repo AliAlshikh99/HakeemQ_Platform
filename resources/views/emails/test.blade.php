@@ -1,11 +1,13 @@
 <x-mail::message>
-# Introduction
+# Activation Email
 
-The body of your message.
+Your Account Is Activated
 
-<x-mail::button :url="''">
+
+
+{{-- <x-mail::button :url="''">
 Button Text
-</x-mail::button>
+</x-mail::button> --}}
 
 Thanks,<br>
 {{ config('app.name') }}
